@@ -46,11 +46,9 @@ Replace `https://demo.pubpub.org` with your community URL, and replace `…` wit
 
 The following actions are not permitted by the SDK, nor through the API in general:
 
-
 ### Creating or deleting communities
 
 Deleting a community is not permitted, due to the risk of accidental deletion of a community. Creating a community is not permitted, due to the potential for abuse (e.g., spam communities).
-
 
 ### Creating, deleting, or modifying users
 
@@ -99,7 +97,7 @@ pnpm generate-docs
 
 - [ ] Add CORS
 - [ ] Add CRUD methods for discussions
-- [ ] Reorder some methods (make attributions a submethod of pub, for example)
+- [ ] Reorder some methods (make attributions a submethod of Pub, for example)
 
 ## FAQ
 
