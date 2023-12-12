@@ -33,7 +33,7 @@ Replace `my-pub` with your Pub’s slug.
 
 The `getMany` methods allow you to search for models. It returns an array of models.
 
-You can filter models in the following ways
+You can filter models in the following ways:
 
 ##### Pagination
 
@@ -66,7 +66,7 @@ By providing `orderBy` and `sortBy` parameters, you can sort the results.
 
 The `orderBy` parameter can always be `updatedAt` or `createdAt`, and the `sortBy` parameter can always be `ASC` or `DESC`.
 
-The `orderBy` parameters can also be some fiels of the model, depending on the model. Check the documentation of the specific method in the API section for more information.
+The `orderBy` parameters can also be some fields of the model, depending on the model. Check the documentation of the specific method in the API section for more information.
 
 ###### Defaults
 
@@ -93,17 +93,17 @@ const { body: communitiesSortedByTitle } = await pubpub.community.getMany({
 
 You can choose which associated models to include in the response by providing an `includes` parameter to your query.
 
-By default, some models are always included. Currently this is not well documented here, check the documentation of the relevant API route to find this information.
+By default, some models are always included. Currently this is not well-documented here; check the documentation of the relevant API route to identify which models are always included.
 
 > [!NOTE]
-> Specifying `includes` will override the default includes.
+> Specifying `includes` will override the default `includes`.
 
 > [!NOTE]
 > The return type will not change based on the `includes` parameter. This means that even though you might have specified `includes: ['pubAttributions']`, the return type will have `pubAttribubtions?: PubAttribution[]` instead of `pubAttributions: PubAttribution[]`.
 
 ##### Attributes
 
-Maybe you don't need all the attributes of a model, and you want to save some bandwidth. You can do this by providing an `attributes` parameter to your query. This parameter is an array of attributes you want to include in the response.
+You may limit the attributes of the model that are returned, by providing an `attributes` parameter to your query. This parameter is an array of attributes that you want to include in the response.
 
 > [!NOTE]
 > Specifying `attributes` will not change the return type.
@@ -131,8 +131,6 @@ console.log(communitiesWithOnlyTitleAndCreatedAt[0].description) // undefined
 
 The most powerful way to query models is by providing a `filter` parameter to your query. This parameter is an object that allows you to filter the results based on the attributes of the model.
 
-You can also provide filters as query parameters. E.g. instead of doing
-
 ```ts
 const { body: pubs } = await pubpub.pub.getMany({
   query: {
@@ -145,11 +143,11 @@ const { body: pubs } = await pubpub.pub.getMany({
 
 Almost any attribute of a model can be used to filter the results. Check the documentation of the relevant API route to find this information.
 
-The filters follow a standard patter.
+The filters follow a standard pattern.
 
 ###### Equality
 
-By just defining the attribute you want to filter on, you can filter on equality.
+By defining the attribute you want to filter on, you can filter on equality (i.e., on the specific value that you define).
 
 ```ts
 {
@@ -159,11 +157,11 @@ By just defining the attribute you want to filter on, you can filter on equality
 }
 ```
 
-will return all communities with the exact title (case-sensitive) `'My community'`.
+This filter object will return all communities with the exact title (case-sensitive) `My community`.
 
 ###### OR
 
-You can provide an array of filters to filter on multiple values.
+In order to filter on multiple values for an attribute, provide an array of values.
 
 ```ts
 {
@@ -173,11 +171,11 @@ You can provide an array of filters to filter on multiple values.
 }
 ```
 
-will return all communities with the exact title (case-sensitive) `'My community'` or `'My other community'`.
+This filter object will return all communities with the exact title (case-sensitive) `My community` or `My other community`.
 
 ###### AND
 
-You can provide an object of filters to filter on multiple attributes.
+In order to filter by multiple attributes, include more than attribute in the object.
 
 ```ts
 {
@@ -188,7 +186,9 @@ You can provide an object of filters to filter on multiple attributes.
 }
 ```
 
-You can also do `AND` filters for the same property, by nesting arrays.
+This filter object will return all communities with both the exact title (case-sensitive) `My community` and the exect description (case-sensitive) `This is my community`.
+
+You can also provide `AND` filters for the same property, by nesting arrays.
 
 ```ts
 {
@@ -207,13 +207,13 @@ You can also do `AND` filters for the same property, by nesting arrays.
 }
 ```
 
-This will return all communities with a title that contains both `'My'` and `'community'`. The `contains` filter for string values is documented below.
+This filter object will return all communities with a title that contains both `My` and `community`. The `contains` filter for string values is documented below.
 
-At the moment, you cannot easily do OR filters for multiple properties, please make multiple requests instead. If you find yourself needing this, please open an issue!
+Currently, you cannot easily provide OR filters for multiple properties; please make multiple requests instead. If you find yourself needing this, please open an issue!
 
 ###### Existence
 
-You can filter on whether an attribute exists or not by providing `true` or `false` as the value.
+To filter on whether an attribute exists or not, provide `true` or `false` as the value.
 
 ```ts
 const attributionsWithUser = await pubpub.pubAttribution.getMany({
@@ -229,7 +229,7 @@ If the property you are filtering on is a string, you can use the following filt
 
 `string`
 
-If you provide a string, or `{ exact: string }`, it will filter on equality.
+If you provide a string (or `{ exact: string }`), the query will filter on equality (i.e., on the exact string).
 
 ```ts
 const pubsCalledMyPub = await pubpub.pub.getMany({
@@ -241,7 +241,7 @@ const pubsCalledMyPub = await pubpub.pub.getMany({
 
 `boolean`
 
-If you provide a boolean, it will filter on existence.
+If you provide a boolean (e.g., `true` or `false`), the query will filter on existence (i.e, whether the attribute exists or not).
 
 ```ts
 const { body: pubsWithoutDownloads } = await pubpub.pub.getMany({
@@ -253,9 +253,7 @@ const { body: pubsWithoutDownloads } = await pubpub.pub.getMany({
 
 `{ contains: string }`
 
-If you provide an object with a `contains` property, it will filter on whether the string contains the provided string.
-
-This is case-insensitive.
+If you provide an object with a `contains` property, the query will filter on whether the string contains the provided string (case-insensitive).
 
 ```ts
 const { body: pubsContainingPub } = await pubpub.pub.getMany({
@@ -269,7 +267,7 @@ const { body: pubsContainingPub } = await pubpub.pub.getMany({
 
 `{ contains: string; not: true }`
 
-If you provide an object with a `contains` property and a `not` property set to `true`, it will filter on whether the string does not contain the provided string.
+If you provide an object with a `contains` property and a `not` property set to `true`, the query will filter on whether the string does *not* contain the provided string.
 
 ```ts
 const { body: pubsNotContainingPub } = await pubpub.pub.getMany({
@@ -282,7 +280,7 @@ const { body: pubsNotContainingPub } = await pubpub.pub.getMany({
 })
 ```
 
-There isn't a way to do `{ exact: string, not: true}`, as this is almost always equivalent to `{ contains: string, not: true }`.
+Currently, there is no way to query `{ exact: string, not: true }`, as this is almost always equivalent to `{ contains: string, not: true }`.
 
 If you find yourself needing this, please open an issue!
 
@@ -318,7 +316,7 @@ type StringFilter =
 
 ###### Enum filters
 
-For attributes that are enums, you can filter on the enum values. You cannot do `contains` queries.
+For attributes that are enums, you can filter on the enum values. Note that you cannot provide `contains` queries on enums.
 
 ```ts
 const issues = await pubpub.collection.getMany({
@@ -328,7 +326,7 @@ const issues = await pubpub.collection.getMany({
 })
 ```
 
-You can of course also do `OR` filters.
+You may also use `OR` filters, by providing an array of values.
 
 ```ts
 const { body: issuesAndBooks } = await pubpub.collection.getMany({
@@ -338,11 +336,11 @@ const { body: issuesAndBooks } = await pubpub.collection.getMany({
 })
 ```
 
-While you can technically do `AND` filters, this is not very useful, as the attribute can only have one value.
+While you can technically use `AND` filters on enum attributes, this filter is not very useful, as the enum attribute can only have one value.
 
 ###### `id` filters
 
-If the property is `id` or ends with `Id` (e.g. `communityId`), you can only provide a full `UUID`, an array of full `UUID`s, or a boolean.
+If the property is `id` or ends with `Id` (e.g., `communityId`), you must provide a full `UUID`, an array of full `UUID`s, or a boolean.
 
 ```ts
 const { body: pub } = await pubpub.pub.get({
@@ -352,11 +350,11 @@ const { body: pub } = await pubpub.pub.get({
 
 ###### `number` or `Date` filters
 
-If the property is a `number` or a `Date`, you can use the following filters.
+If the property is a `number` or a `Date`, you can use the following filters:
 
-####### `number` | `Date`
+`number` | `Date`
 
-If you provide a number, it will filter on equality.
+If you provide a number, the query will filter on equality (i.e., on the specified number).
 
 ```ts
 const pubsCreatedAtAnExactDate = await pubpub.pub.getMany({
@@ -366,9 +364,9 @@ const pubsCreatedAtAnExactDate = await pubpub.pub.getMany({
 })
 ```
 
-`{ gt: number | Date, lt: number | Date, eq: number | Date, gte: number | Date, lte: number | Date, ne: number | Date }`
+If you provide an object with any of the properties listed here, the query will filter on the corresponding comparison:
 
-If you provide an object with any of the above properties, it will filter on the corresponding comparison.
+`{ gt: number | Date, lt: number | Date, eq: number | Date, gte: number | Date, lte: number | Date, ne: number | Date }`
 
 ```ts
 const { body: pubsCreatedAfter2020 } = await pubpub.pub.getMany({
@@ -380,7 +378,7 @@ const { body: pubsCreatedAfter2020 } = await pubpub.pub.getMany({
 })
 ```
 
-You can combine these as with other filters.
+You may combine these, as with other filters.
 
 ```ts
 const { body: pubsCreatedBetween2020And2021 } = await pubpub.pub.getMany({
@@ -409,6 +407,8 @@ const { body: pubsCreatedBefore2020OrAfter2021 } = await pubpub.pub.getMany({
 ```
 
 **Full types**
+
+This is the full type of the `filter` parameter for `number` properties.
 
 ```ts
 type NumberFilter =
@@ -459,8 +459,9 @@ type NumberFilter =
   | undefined
 ```
 
-For Dates, you can either input a `Date` object, or an ISO formatted string.
-It does not really matter, as it implicitly `Date.toISOString()` gets called on the value.
+For Dates, you can either input a `Date` object, or an ISO-formatted string. It does not really matter which you use, as `Date.toISOString()` gets called on the value.
+
+This is the full type of the `filter` parameter for `DATE` properties.
 
 ```ts
 type Date =
